@@ -34,7 +34,8 @@ class Calendar {
                 throw new Error('Non authentifié');
             }
 
-            const response = await fetch('http://localhost:3000/api/seances', {
+            const API_URL = window.location.origin;
+            const response = await fetch(`${API_URL}/api/seances`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -372,7 +373,8 @@ class Calendar {
             // Ajout de logs pour déboguer
             console.log('Tentative de suppression de la séance:', id);
 
-            const response = await fetch(`http://localhost:3000/api/seances/${id}`, {
+            const API_URL = window.location.origin;
+            const response = await fetch(`${API_URL}/api/seances/${id}`, {
                 method: 'DELETE'
             });
 
@@ -422,7 +424,8 @@ class Calendar {
 
 class WorkoutManager {
     static async delete(id) {
-        const response = await fetch(`http://localhost:3000/api/seances/${id}`, {
+        const API_URL = window.location.origin;
+        const response = await fetch(`${API_URL}/api/seances/${id}`, {
             method: 'DELETE'
         });
 
