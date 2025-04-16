@@ -41,11 +41,14 @@ app.use(express.static(path.join(__dirname)));
 
 // Connexion à la base de données MySQL
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'Root123$',
-    database: process.env.DB_NAME || 'workout_tracker',
-    port: process.env.DB_PORT || 3306
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    ssl: {
+        rejectUnauthorized: true
+    }
 });
 
 // Test de connexion plus détaillé
@@ -114,7 +117,7 @@ const auth = (req, res, next) => {
             return res.status(401).json({ error: 'Token manquant' });
         }
 
-        const decodedToken = jwt.verify(token, 'votre_secret_jwt');
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         console.log('Token décodé:', decodedToken);
 
         req.userData = {
@@ -257,7 +260,7 @@ app.post('/api/auth/register', async (req, res) => {
 
             const token = jwt.sign(
                 { userId: result.insertId },
-                'votre_secret_jwt',
+                process.env.JWT_SECRET,
                 { expiresIn: '24h' }
             );
 
@@ -301,7 +304,7 @@ app.post('/api/auth/login', async (req, res) => {
                     userId: user.id,
                     isAdmin: user.is_admin
                 },
-                'votre_secret_jwt',
+                process.env.JWT_SECRET,
                 { expiresIn: '24h' }
             );
 

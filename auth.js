@@ -51,4 +51,32 @@ class Auth {
         }
         return false;
     }
+
+    static async register(username, email, password) {
+        const response = await fetch(`${window.location.origin}/api/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || 'Erreur lors de l\'inscription');
+        }
+
+        localStorage.setItem('userToken', data.token);
+        return data;
+    }
+
+    static async login(email, password) {
+        const response = await fetch(`${window.location.origin}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+    }
 } 
