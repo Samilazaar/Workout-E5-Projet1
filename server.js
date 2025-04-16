@@ -45,10 +45,7 @@ const db = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: true
-    }
+    port: process.env.DB_PORT
 });
 
 // Test de connexion plus détaillé
@@ -77,28 +74,6 @@ db.connect(err => {
             return;
         }
         console.log('Base de données active:', results[0].db);
-    });
-
-    // Vérifier que la table existe
-    db.query('SHOW TABLES LIKE "seances"', (err, results) => {
-        if (err) {
-            console.error('Erreur lors de la vérification de la table:', err);
-            return;
-        }
-        if (results.length === 0) {
-            console.error('La table seances n\'existe pas !');
-            return;
-        }
-        console.log('Connecté à la base de données MySQL et table seances trouvée');
-    });
-
-    // Ajoute après la configuration de la base de données
-    db.query('SELECT 1', (err) => {
-        if (err) {
-            console.error('Erreur de connexion MySQL:', err);
-            process.exit(1);
-        }
-        console.log('Connexion MySQL établie');
     });
 });
 
